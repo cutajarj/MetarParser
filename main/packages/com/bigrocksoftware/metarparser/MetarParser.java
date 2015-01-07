@@ -506,14 +506,12 @@ public class MetarParser {
 
 				if (utility.match("/M?\\d+/", token)) {
 					log.debug("MetarParser: visibility");
-
 					if (token.startsWith("M")) {
 						log.debug("MetarParser: visibility: less than");
 						isLessThan = true;
 						token = token.substring(1, token.length());
 					}
-
-					metar.setVisibilityInMeters(new Float(token.replace("NDV", "")));
+					metar.setVisibilityInMeters(new Float(token.replace("NDV", "").replace("S", "").replace("N", "").replace("W","").replace("E", "")));
 					metar.setVisibilityLessThan(isLessThan);
 
 					// on to the next token
@@ -738,6 +736,7 @@ public class MetarParser {
 
 		log.debug("MetarParser: processing ((String)tokens.get("+index+"))="+((String)tokens.get(index)));
 
+
 		// sky condition
 		// format: NNNhhh or VVhhh or CLR/SKC
 		//     NNN - amount of sky cover
@@ -822,11 +821,16 @@ public class MetarParser {
 			log.debug("MetarParser: found temperature");
 			ArrayList temps = new ArrayList();
 
+			String tempsStr = ((String)tokens.get(index));
 			try {
-				utility.split(temps, "/\\//", ((String)tokens.get(index)));
+				utility.split(temps, "/\\//", tempsStr);
 			} catch(MalformedPerl5PatternException e) {
 				log.error("MetarParser: error spliting temperature on /: "+e);
 				throw new MetarParseException("error spliting temperature on /: "+e);
+			}
+
+			if (temps.size()<2) {
+				throw new MetarParseException("error spliting temperature on "+tempsStr);
 			}
 
 			// we have a sub-zero temperature

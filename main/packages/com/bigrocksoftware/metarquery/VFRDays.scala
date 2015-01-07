@@ -10,15 +10,15 @@ import org.joda.time.DateTimeConstants
 object VFRDays {
 
   val months = Seq("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
-  val years = Seq("2008", "2009", "2010","2011","2012")
+  val years = Seq("2014")
 
   val airport = "EGLL"
-  val startTimeUTC = 8
+  val startTimeUTC = 9
   val endTimeUTC = 16
   
   val maxWindSpeedKTS = 15
   val maxVisM = 5000
-  val minCeiling = 2500
+  val minCeiling = 2200
 
   def main(args: Array[String]) {
     val averages = months.map { m =>
